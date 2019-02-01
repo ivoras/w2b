@@ -32,7 +32,8 @@ To update an existing database and generate a diff database:
 ## Storage requirements
 
 As a reference, the "Simple English" Wikipedia dump file is 155 MB in size, and it results in
-a SQLite database which is nearly 600 GB.
+a SQLite database which is nearly 600 GB. The diff databases for about a month of data are
+around 40 MB in size.
 
 ## Licensing
 

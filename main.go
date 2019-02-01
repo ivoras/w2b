@@ -93,8 +93,11 @@ func main() {
 
 	db, err := sql.Open("sqlite3", dbFileName)
 	if err != nil {
-		fmt.Println(err)
-		return
+		panic(err)
+	}
+	_, err = db.Exec("PRAGMA cache_size=-204800")
+	if err != nil {
+		panic(err)
 	}
 
 	if !tableExists(db, "page") {
