@@ -13,6 +13,7 @@ These databases may be imported into the [Daisy](https://github.com/ivoras/daisy
 or used in any other suitable way.
 
 The input files may be either decompressed XML files, or original bzip2-compressed XML files.
+Note that in any case this is a time-consuming process.
 
 ## Usage:
 

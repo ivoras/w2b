@@ -6,7 +6,6 @@ import (
 	"flag"
 	"fmt"
 	"io"
-	"log"
 	"os"
 	"strings"
 	"time"
@@ -64,7 +63,10 @@ func processPage(tx, txDiff *sql.Tx, page *wikiparse.Page) {
 	}
 	prev := page.Revisions[0]
 	if prev.ID != rev {
-		log.Println("New revision for page", page.Title, "old:", rev, "new:", prev.ID)
+		// log.Println("New revision for page", page.Title, "old:", rev, "new:", prev.ID)
+		os.Stderr.Write([]byte{'*'})
+		os.Stderr.Sync()
+
 		updatePage(tx, page)
 		if txDiff != nil {
 			insertPage(txDiff, page)
@@ -107,6 +109,12 @@ func main() {
 		dbDiff, err = sql.Open("sqlite3", diffDbFileName)
 		if err != nil {
 			panic(err)
+		}
+		if !tableExists(dbDiff, "page") {
+			_, err := dbDiff.Exec(pageTableSQL)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 
@@ -175,6 +183,6 @@ func main() {
 		}
 	}
 
-	fmt.Println()
+	fmt.Println(count, "records")
 	fmt.Println(time.Now().Sub(timeStart))
 }
