@@ -52,20 +52,21 @@ func updatePage(tx *sql.Tx, page *wikiparse.Page) {
 func processPage(tx *sql.Tx, page *wikiparse.Page) {
 	row := tx.QueryRow(`SELECT id, rev, ts FROM page WHERE title=?`, page.Title)
 	var id, rev uint64
-	var ts time.Time
+	var ts string
 	err := row.Scan(&id, &rev, &ts)
 	if err != nil {
 		insertPage(tx, page)
 		return
 	}
 	prev := page.Revisions[0]
-	if prev.ID != id {
+	if prev.ID != rev {
 		log.Println("New revision for page", page.Title, "old:", rev, "new:", prev.ID)
 		updatePage(tx, page)
 	}
 }
 
 func main() {
+	timeStart := time.Now()
 	flag.StringVar(&dbFileName, "db", "wiki.db", "SQLite database filename")
 	flag.StringVar(&wikiDumpFileName, "file", "", "Wikimedia dump XML file (possibly .bz2)")
 	flag.Parse()
@@ -143,4 +144,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println()
+	fmt.Println(time.Now().Sub(timeStart))
 }
