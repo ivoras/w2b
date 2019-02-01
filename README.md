@@ -13,9 +13,23 @@ or used in any other suitable way.
 
 The input files may be either decompressed XML files, or original bzip2-compressed XML files.
 
+## Usage:
+
+To simply import (or update) a dump file:
+
+```
+./w2b --file simplewiki-20190101-pages-articles-multistream.xml.bz2 --db simplewiki.db
+```
+
+To update an existing database and generate a diff database:
+
+```
+./w2b --file simplewiki-20190120-pages-articles-multistream.xml.bz2 --db simplewiki.db --diff-db diff20190101.db
+```
+
 ## Storage requirements
 
-As a reference, the "Simple English" Wikipedia dump file is 16 GB in size, and it results in
+As a reference, the "Simple English" Wikipedia dump file is 155 MB in size, and it results in
 a SQLite database which is nearly 600 GB.
 
 ## Licensing
