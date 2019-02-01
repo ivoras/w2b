@@ -57,14 +57,18 @@ func processPage(tx, txDiff *sql.Tx, page *wikiparse.Page) {
 	err := row.Scan(&id, &rev, &ts)
 	if err != nil {
 		insertPage(tx, page)
-		insertPage(txDiff, page)
+		if txDiff != nil {
+			insertPage(txDiff, page)
+		}
 		return
 	}
 	prev := page.Revisions[0]
 	if prev.ID != rev {
 		log.Println("New revision for page", page.Title, "old:", rev, "new:", prev.ID)
 		updatePage(tx, page)
-		insertPage(txDiff, page)
+		if txDiff != nil {
+			insertPage(txDiff, page)
+		}
 	}
 }
 
