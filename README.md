@@ -11,4 +11,13 @@ between the dumps.
 These databases may be imported into the [Daisy](https://github.com/ivoras/daisy) blockchain,
 or used in any other suitable way.
 
+The input files may be either decompressed XML files, or original bzip2-compressed XML files.
+
+## Storage requirements
+
+As a reference, the "Simple English" Wikipedia dump file is 16 GB in size, and it results in
+a SQLite database which is nearly 600 GB.
+
+## Licensing
+
 This code is released under the MIT license.
