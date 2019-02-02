@@ -35,6 +35,13 @@ As a reference, the "Simple English" Wikipedia dump file is 155 MB in size, and 
 a SQLite database which is nearly 600 GB. The diff databases for about a month of data are
 around 40 MB in size.
 
+## TODO
+
+* An automated script which will parse Wikimedia dump JSON status files, create the diffs and 
+  push them into the blockchain.
+* Multithreading for faster operation
+* Possibly also store a version of the wiki text with stripped markup?
+
 ## Licensing
 
 This code is released under the MIT license.
