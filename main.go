@@ -76,9 +76,11 @@ func processPage(tx, txDiff *sql.Tx, page *wikiparse.Page) {
 
 func main() {
 	timeStart := time.Now()
+	threaded := false
 	flag.StringVar(&dbFileName, "db", "wiki.db", "SQLite database filename for the import")
 	flag.StringVar(&wikiDumpFileName, "file", "", "Wikimedia dump XML file (possibly .bz2)")
 	flag.StringVar(&diffDbFileName, "diff-db", "", "SQLite database filename for the diff (optional)")
+	flag.BoolVar(&threaded, "threaded", false, "Use multithreading (Experimental!)")
 	flag.Parse()
 
 	if wikiDumpFileName == "" {
@@ -158,21 +160,31 @@ func main() {
 		var page *wikiparse.Page
 		page, err = p.Next()
 		if err == nil {
-			processPage(tx, txDiff, page)
+			if threaded {
+				go processPage(tx, txDiff, page)
+			} else {
+				processPage(tx, txDiff, page)
+			}
 		}
 		count++
 		if count%1000 == 0 {
-			err = tx.Commit()
-			if err != nil {
-				panic(err)
-			}
-			tx, err = db.Begin()
-			if err != nil {
-				panic(err)
+			if !threaded {
+				err = tx.Commit()
+				if err != nil {
+					panic(err)
+				}
+				tx, err = db.Begin()
+				if err != nil {
+					panic(err)
+				}
 			}
 			os.Stderr.Write([]byte{'.'})
 			os.Stderr.Sync()
 		}
+	}
+
+	if threaded {
+		time.Sleep(1 * time.Second)
 	}
 
 	err = tx.Commit()
